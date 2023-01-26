@@ -21,11 +21,13 @@ public class CommandInjectionSanitizer {
     public static void processImplStartHook(
             MethodHandle method, Object thisObject, Object[] arguments, int hookId) {
         if (arguments.length > 0) {
-            String cmd = (String) arguments[0];
+            String[] cmds = (String[])arguments[0];
+            String cmd = String.join(" ", cmds);
+            System.out.println(cmd);
             if (Objects.equals(cmd, "inject")) {
                 Jazzer.reportFindingFromHook(
                         new FuzzerSecurityIssueCritical("OS Command Injection"));
-            }else if (!Pattern.matches("^sh -c '[a-zA-Z0-9\\s]*-?[a-zA-Z0-9\\s]*'$", cmd)) {
+            }else if (!Pattern.matches("^sh -c [a-zA-Z0-9\\s.]*-?[a-zA-Z0-9\\s.]*$", cmd)) {
                 Jazzer.reportFindingFromHook(
                         new FuzzerSecurityIssueCritical("OS Command Injection"));
             } else {

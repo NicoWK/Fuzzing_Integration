@@ -42,13 +42,14 @@ public class FileOperations {
     }
 
     public String writeToFile(String path, String text){
+
         try {
             FileWriter myWriter = new FileWriter(path);
             myWriter.write(text);
             myWriter.close();
             return "writing to file was successful\n";
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return "writing to file gone wrong\n";
     }
@@ -73,8 +74,6 @@ public class FileOperations {
                 }
             }
         }
-
-
         return filenames;
     }
 

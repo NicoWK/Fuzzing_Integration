@@ -12,15 +12,10 @@ public class PathTraversalFuzzTest {
 
     public static void fuzzerTestOneInput(FuzzedDataProvider data) {
         FileOperations fileOperations = new FileOperations();
-        Path normalized;
-        String filePath = "";
+        String filename = data.consumeRemainingAsAsciiString();
         try {
-            String filename = data.consumeAsciiString(20);
-            String path = fileOperations.writeToFile("safe_dir", filename+".txt");
-            normalized = Paths.get(path).normalize();
-            filePath = normalized.toString();
-            //if Path could contain the "../" pattern following the "safe_dir", after normalization it should not start with safe_dir --> Path Traversal
-            Assert.assertTrue(filePath.startsWith("safe_dir"));
+            String filePath  = fileOperations.createFile("safe_dir", filename);
+            fileOperations.writeToFile(filePath, "File content");
         } catch (NullPointerException | InvalidPathException  ignored){
 
         }

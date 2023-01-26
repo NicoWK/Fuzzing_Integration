@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.vulnerabilities.CommandExecution;
 import org.example.vulnerabilities.NullPointerDereference;
 import org.example.web.WebInterface;
 

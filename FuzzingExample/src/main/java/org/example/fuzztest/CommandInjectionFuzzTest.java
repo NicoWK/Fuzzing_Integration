@@ -8,7 +8,7 @@ public class CommandInjectionFuzzTest {
     public static void fuzzerTestOneInput(FuzzedDataProvider data) {
         CommandExecution pingExec = new CommandExecution();
         try {
-            pingExec.executeShell("ping -c "+data.consumeRemainingAsAsciiString());
+            pingExec.executePing(data.consumeRemainingAsAsciiString());
         } catch (Exception ignored) {
         }
     }

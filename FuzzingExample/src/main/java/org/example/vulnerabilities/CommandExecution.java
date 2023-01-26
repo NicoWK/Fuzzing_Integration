@@ -37,14 +37,14 @@ public class CommandExecution {
         return result;
     }
 
-    public String executeShell(String command){
+    public String executePing(String hostname){
         String line;
         BufferedReader bufferedReader;
         String result = "";
 
         try {
             //execution of possible malicious user input
-            Process process = getRuntime().exec("sh -c"+command);
+            Process process = getRuntime().exec(new String[] {"sh","-c", "ping -c 4 "+ hostname});
             System.out.println(process.waitFor());
             //output the result of the command
             InputStreamReader isr = new InputStreamReader(process.getInputStream());
