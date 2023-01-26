@@ -1,0 +1,29 @@
+{
+  "name": "radical_sheep",
+  "type": "WARNING",
+  "logs": [
+    "== Java Exception: java.lang.AssertionError",
+    "\tat org.junit.Assert.fail(Assert.java:87)",
+    "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+    "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+    "\tat PathTraversalFuzzTest.inputFuzzTest(PathTraversalFuzzTest.java:28)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "",
+    "",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/radical_sheep/crashing-input",
+    "Base64: "
+  ],
+  "details": "java.lang.AssertionError",
+  "created_at": "2023-01-26T10:22:23.546570788+01:00",
+  "input_file": ".cifuzz-findings/radical_sheep/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "org.junit.Assert",
+      "Line": 87,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "fail"
+    }
+  ]
+}

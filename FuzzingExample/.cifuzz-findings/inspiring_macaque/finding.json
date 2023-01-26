@@ -1,0 +1,28 @@
+{
+  "name": "inspiring_macaque",
+  "type": "WARNING",
+  "input_data": "Ly9hZmlyZGl61g==",
+  "logs": [
+    "== Java Exception: java.lang.NegativeArraySizeException: -696620700",
+    "\tat org.example.vulnerabilities.ImproperInputValidation.rollDice(ImproperInputValidation.java:6)",
+    "\tat ImproperInputValidationFuzzTest.diceRollFuzzTest(ImproperInputValidationFuzzTest.java:12)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "0x2f,0x2f,0x61,0x66,0x69,0x72,0x64,0x69,0x7a,0xd6,",
+    "//afirdiz\\326",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/inspiring_macaque/crashing-input",
+    "Base64: Ly9hZmlyZGl61g=="
+  ],
+  "details": "java.lang.NegativeArraySizeException: -696620700",
+  "created_at": "2023-01-26T10:13:59.723547134+01:00",
+  "input_file": ".cifuzz-findings/inspiring_macaque/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "org.example.vulnerabilities.ImproperInputValidation",
+      "Line": 6,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "rollDice"
+    }
+  ]
+}

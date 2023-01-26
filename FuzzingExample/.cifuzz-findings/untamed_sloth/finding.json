@@ -1,0 +1,42 @@
+{
+  "name": "untamed_sloth",
+  "type": "CRASH",
+  "input_data": "Cmphenpl",
+  "logs": [
+    "== Java Exception: com.code_intelligence.jazzer.api.FuzzerSecurityIssueCritical: OS Command Injection",
+    "Executing OS commands with attacker-controlled data can lead to remote code execution.",
+    "\tat com.code_intelligence.jazzer.sanitizers.OsCommandInjection.processImplStartHook(OsCommandInjection.kt:52)",
+    "\tat java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1110)",
+    "\tat java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1073)",
+    "\tat java.base/java.lang.Runtime.exec(Runtime.java:615)",
+    "\tat java.base/java.lang.Runtime.exec(Runtime.java:439)",
+    "\tat java.base/java.lang.Runtime.exec(Runtime.java:322)",
+    "\tat org.example.vulnerabilities.CommandExecution.execute(CommandExecution.java:20)",
+    "\tat CommandInjectionFuzzTest.pingFuzzTest(CommandInjectionFuzzTest.java:16)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "0xa,0x6a,0x61,0x7a,0x7a,0x65,",
+    "\\012jazze",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/untamed_sloth/crashing-input",
+    "Base64: Cmphenpl"
+  ],
+  "details": "Security Issue: OS Command Injection",
+  "more_details": {
+    "name": "OS Command Injection",
+    "severity": {
+      "description": "CRITICAL",
+      "score": 9
+    }
+  },
+  "created_at": "2023-01-26T10:08:53.228527554+01:00",
+  "input_file": ".cifuzz-findings/untamed_sloth/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "com.code_intelligence.jazzer.sanitizers.OsCommandInjection",
+      "Line": 52,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "processImplStartHook"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": "frosty_impala",
+  "type": "CRASH",
+  "input_data": "rO0ABXNyAAdqYXouWmVyAAAAAAAAACoCAAB4cAmM7Q==",
+  "logs": [
+    "== Java Exception: com.code_intelligence.jazzer.api.FuzzerSecurityIssueHigh: Remote Code Execution",
+    "Unrestricted class loading based on externally controlled data may allow",
+    "remote code execution depending on available classes on the classpath.",
+    "\tat jaz.Zer.\u003cclinit\u003e(Zer.java:54)",
+    "\tat java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)",
+    "\tat java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160)",
+    "\tat java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:300)",
+    "\tat java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newFieldAccessor(MethodHandleAccessorFactory.java:140)",
+    "\tat java.base/jdk.internal.reflect.ReflectionFactory.newFieldAccessor(ReflectionFactory.java:176)",
+    "\tat java.base/java.lang.reflect.Field.acquireOverrideFieldAccessor(Field.java:1184)",
+    "\tat java.base/java.lang.reflect.Field.getOverrideFieldAccessor(Field.java:1153)",
+    "\tat java.base/java.lang.reflect.Field.getLong(Field.java:652)",
+    "\tat java.base/java.io.ObjectStreamClass.getDeclaredSUID(ObjectStreamClass.java:1711)",
+    "\tat java.base/java.io.ObjectStreamClass$2.run(ObjectStreamClass.java:396)",
+    "\tat java.base/java.io.ObjectStreamClass$2.run(ObjectStreamClass.java:384)",
+    "\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:318)",
+    "\tat java.base/java.io.ObjectStreamClass.\u003cinit\u003e(ObjectStreamClass.java:384)",
+    "\tat java.base/java.io.ObjectStreamClass$Caches$1.computeValue(ObjectStreamClass.java:110)",
+    "\tat java.base/java.io.ObjectStreamClass$Caches$1.computeValue(ObjectStreamClass.java:107)",
+    "\tat java.base/java.io.ClassCache$1.computeValue(ClassCache.java:73)",
+    "\tat java.base/java.io.ClassCache$1.computeValue(ClassCache.java:70)",
+    "\tat java.base/java.lang.ClassValue.getFromHashMap(ClassValue.java:228)",
+    "\tat java.base/java.lang.ClassValue.getFromBackup(ClassValue.java:210)",
+    "\tat java.base/java.lang.ClassValue.get(ClassValue.java:116)",
+    "\tat java.base/java.io.ClassCache.get(ClassCache.java:84)",
+    "\tat java.base/java.io.ObjectStreamClass.lookup(ObjectStreamClass.java:363)",
+    "\tat java.base/java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:579)",
+    "\tat java.base/java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:2075)",
+    "\tat java.base/java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1922)",
+    "\tat java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2248)",
+    "\tat java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1757)",
+    "\tat java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:538)",
+    "\tat java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:496)",
+    "\tat org.example.vulnerabilities.SerializationHelper.deserialize(SerializationHelper.java:10)",
+    "\tat DeserializationFuzzTest.deserializationFuzzTest(DeserializationFuzzTest.java:11)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "0xac,0xed,0x0,0x5,0x73,0x72,0x0,0x7,0x6a,0x61,0x7a,0x2e,0x5a,0x65,0x72,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2a,0x2,0x0,0x0,0x78,0x70,0x9,0x8c,0xed,",
+    "\\254\\355\\000\\005sr\\000\\007jaz.Zer\\000\\000\\000\\000\\000\\000\\000*\\002\\000\\000xp\\011\\214\\355",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/frosty_impala/crashing-input",
+    "Base64: rO0ABXNyAAdqYXouWmVyAAAAAAAAACoCAAB4cAmM7Q=="
+  ],
+  "details": "Security Issue: Remote Code Execution",
+  "more_details": {
+    "name": "Remote Code Execution",
+    "severity": {
+      "description": "HIGH",
+      "score": 7
+    }
+  },
+  "created_at": "2023-01-26T10:11:08.665152286+01:00",
+  "input_file": ".cifuzz-findings/frosty_impala/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "org.example.vulnerabilities.SerializationHelper",
+      "Line": 10,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "deserialize"
+    }
+  ]
+}

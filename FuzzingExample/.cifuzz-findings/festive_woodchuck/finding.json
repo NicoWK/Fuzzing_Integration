@@ -1,0 +1,30 @@
+{
+  "name": "festive_woodchuck",
+  "type": "WARNING",
+  "input_data": "CAAACCoA7QDtAAACAAI=",
+  "logs": [
+    "== Java Exception: java.lang.AssertionError",
+    "\tat org.junit.Assert.fail(Assert.java:87)",
+    "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+    "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+    "\tat IntegerWraparoundFuzzTest.exponentationFuzzTest(IntegerWraparoundFuzzTest.java:23)",
+    "== libFuzzer crashing input ==",
+    "MS: 1 InsertByte-; base unit: 6222ef3dbb82b13581a33432d2a19883f04db833",
+    "0x8,0x0,0x0,0x8,0x2a,0x0,0xed,0x0,0xed,0x0,0x0,0x2,0x0,0x2,",
+    "\\010\\000\\000\\010*\\000\\355\\000\\355\\000\\000\\002\\000\\002",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/festive_woodchuck/crashing-input",
+    "Base64: CAAACCoA7QDtAAACAAI="
+  ],
+  "details": "java.lang.AssertionError",
+  "created_at": "2023-01-26T10:16:34.784286853+01:00",
+  "input_file": ".cifuzz-findings/festive_woodchuck/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "org.junit.Assert",
+      "Line": 87,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "fail"
+    }
+  ]
+}

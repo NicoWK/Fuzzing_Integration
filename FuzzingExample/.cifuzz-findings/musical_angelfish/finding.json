@@ -1,0 +1,38 @@
+{
+  "name": "musical_angelfish",
+  "type": "CRASH",
+  "input_data": "JwEB",
+  "logs": [
+    "== Java Exception: com.code_intelligence.jazzer.api.FuzzerSecurityIssueHigh: SQL Injection",
+    "Injected query: SELECT id FROM users WHERE username = ''\u0001\u0001'",
+    "",
+    "\tat com.code_intelligence.jazzer.sanitizers.SqlInjection.checkSqlExecute(SqlInjection.java:100)",
+    "\tat org.example.database.Database.create(Database.java:59)",
+    "\tat SQLInjectionuzzTest.insertDataFuzzTest(SQLInjectionuzzTest.java:35)",
+    "== libFuzzer crashing input ==",
+    "MS: 2 ShuffleBytes-InsertByte-; base unit: 9159cb8bcee7fcb95582f140960cdae72788d326",
+    "0x27,0x1,0x1,",
+    "'\\001\\001",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/musical_angelfish/crashing-input",
+    "Base64: JwEB"
+  ],
+  "details": "Security Issue: SQL Injection",
+  "more_details": {
+    "name": "SQL Injection",
+    "severity": {
+      "description": "HIGH",
+      "score": 7
+    }
+  },
+  "created_at": "2023-01-26T10:27:51.005906458+01:00",
+  "input_file": ".cifuzz-findings/musical_angelfish/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "com.code_intelligence.jazzer.sanitizers.SqlInjection",
+      "Line": 100,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "checkSqlExecute"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "understanding_opossum",
+  "type": "WARNING",
+  "input_data": "LAA=",
+  "logs": [
+    "== Java Exception: java.lang.NullPointerException: Cannot invoke \"String.length()\" because \"name\" is null",
+    "\tat org.example.vulnerabilities.NullPointerDereference.validateNames(NullPointerDereference.java:49)",
+    "\tat NullPointerDereferenceFuzzTest.calculateCostFuzzTest(NullPointerDereferenceFuzzTest.java:11)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "0x2c,0x0,",
+    ",\\000",
+    "artifact_prefix='./'; Test unit written to .cifuzz-findings/understanding_opossum/crashing-input",
+    "Base64: LAA="
+  ],
+  "details": "java.lang.NullPointerException: Cannot invoke \"String.length()\" because \"name\" is null",
+  "created_at": "2023-01-26T10:19:11.191480827+01:00",
+  "input_file": ".cifuzz-findings/understanding_opossum/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "org.example.vulnerabilities.NullPointerDereference",
+      "Line": 49,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "validateNames"
+    }
+  ]
+}
