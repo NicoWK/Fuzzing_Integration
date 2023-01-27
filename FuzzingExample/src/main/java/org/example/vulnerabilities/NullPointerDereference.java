@@ -19,11 +19,14 @@ public class NullPointerDereference {
         String currentName = null;
         for (int i = 0; i < names.length(); i++) {
             char currentChar = names.charAt(i);
-            if (currentChar == ',') {
-                nameList.add(currentName);
-                currentName = null;
-            } else {
+            if (currentChar != ',') {
+                if(currentName == null){
+                    currentName = "";
+                }
                 currentName += currentChar;
+            } else {
+                nameList.add(currentName);
+                currentName=null;
             }
         }
         return nameList;
@@ -38,8 +41,13 @@ public class NullPointerDereference {
      * @return a string indicating if any names do not meet the requirements, or that all names are valid
      */
     public String validateNames(String names) {
+        // verify the list of names is not empty
         if (names.isEmpty()) {
             return "String is empty";
+        }
+        // delete whitespaces for easier separation at the commas
+        while (names.contains(" ")){
+            names = names.replace(" ", "");
         }
         // could return Null
         ArrayList<String> nameArray = convertToArray(names);

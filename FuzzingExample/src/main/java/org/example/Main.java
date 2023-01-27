@@ -4,6 +4,8 @@ import org.example.vulnerabilities.CommandExecution;
 import org.example.vulnerabilities.NullPointerDereference;
 import org.example.web.WebInterface;
 
+import java.io.IOException;
+
 /**
  * @author Nico Werner Keller
  * @version 1.0
@@ -12,7 +14,7 @@ import org.example.web.WebInterface;
  * to start the Web-Server and the CLI-Interface.
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         WebInterface web = new WebInterface();
         web.startServer();
     }

@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,32 +53,28 @@ public class WebInterface {
      * HttpHandler interface. The server's executor is set to null. If an IOException is thrown, it is
      * caught and the stack trace is printed.
      */
-    public void startServer() {
+    public void startServer() throws IOException {
         System.out.println("Starting Webserver...");
         HttpServer server;
-        try {
-            server = HttpServer.create(new InetSocketAddress("localhost", 8081), 0);
-            //ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-            WebInterface webInterface = new WebInterface();
-            server.createContext("/", webInterface.new IndexHttpHandler());
-            server.createContext("/login", webInterface.new LoginHttpHandler());
-            server.createContext("/register", webInterface.new LoginHttpHandler());
-            server.createContext("/logout", webInterface.new LoginHttpHandler());
-            server.createContext("/changePassword", webInterface.new LoginHttpHandler());
-            server.createContext("/command", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/resourceConsumption", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/nullDereference", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/pathTraversal", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/inputValidation", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/deserialization", webInterface.new VulnerablilityHttpHandler());
-            server.createContext("/wraparound", webInterface.new VulnerablilityHttpHandler());
-            //server.setExecutor(threadPoolExecutor);
-            server.setExecutor(null);
-            server.start();
-            System.out.println(" Server started on port 8081");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        server = HttpServer.create(new InetSocketAddress("localhost", 8081), 0);
+        //ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+        WebInterface webInterface = new WebInterface();
+        server.createContext("/", webInterface.new IndexHttpHandler());
+        server.createContext("/login", webInterface.new LoginHttpHandler());
+        server.createContext("/register", webInterface.new LoginHttpHandler());
+        server.createContext("/logout", webInterface.new LoginHttpHandler());
+        server.createContext("/changePassword", webInterface.new LoginHttpHandler());
+        server.createContext("/command", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/resourceConsumption", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/nullDereference", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/pathTraversal", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/inputValidation", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/deserialization", webInterface.new VulnerabilityHttpHandler());
+        server.createContext("/wraparound", webInterface.new VulnerabilityHttpHandler());
+        //server.setExecutor(threadPoolExecutor);
+        server.setExecutor(null);
+        server.start();
+        System.out.println(" Server started on port 8081");
     }
 
     /**
@@ -618,7 +613,7 @@ public class WebInterface {
      * The VulnerabilityHttpHandler class implements the HttpHandler and handles different types of vulnerabilities.
      * It checks if the user is logged in and based on the request method and URI, it calls the appropriate method to handle the request and generate the response.
      */
-    public class VulnerablilityHttpHandler implements HttpHandler {
+    public class VulnerabilityHttpHandler implements HttpHandler {
         @Override
         /**
          * The handle method handles HTTP requests for the server. It checks the request method and URI to determine
@@ -631,10 +626,11 @@ public class WebInterface {
          */
         public void handle(HttpExchange exchange) throws IOException {
             Map<String, String> params = null;
+            StringBuilder htmlbuilder = new StringBuilder();
             if (loggedIn) {
-                if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/command") && !exchange.getRequestURI().getQuery().contains("domain")) {
+                if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/command") && !exchange.getRequestURI().getQuery().contains("domain") && !exchange.getRequestURI().getQuery().contains("parameter")) {
                     handleResponse(exchange, getCommandPage());
-                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/command") && exchange.getRequestURI().getQuery().contains("domain")) {
+                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/command") && ( exchange.getRequestURI().getQuery().contains("domain") || exchange.getRequestURI().getQuery().contains("parameter") )) {
                     params = paramsToMap(exchange.getRequestURI().getQuery());
                     handleResponse(exchange, getCommandResponsePage(params));
                 } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/resourceConsumption") && !exchange.getRequestURI().getQuery().contains("days") && !exchange.getRequestURI().getQuery().contains("dailyCost")) {
@@ -660,9 +656,9 @@ public class WebInterface {
                 } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/pathTraversal") && ((exchange.getRequestURI().getQuery().contains("content") && exchange.getRequestURI().getQuery().contains("filename")) || exchange.getRequestURI().getQuery().contains("fileDownload") || exchange.getRequestURI().getQuery().contains("fileDelete"))) {
                     params = paramsToMap(exchange.getRequestURI().getQuery());
                     handleResponse(exchange, getPathTraversalResponsePage(params));
-                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/wraparound") && !exchange.getRequestURI().getQuery().contains("content") && !exchange.getRequestURI().getQuery().contains("filename")) {
+                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/wraparound") && !exchange.getRequestURI().getQuery().contains("initialCapital") && !exchange.getRequestURI().getQuery().contains("monthlySavings") && !exchange.getRequestURI().getQuery().contains("investmentPeriod") && !exchange.getRequestURI().getQuery().contains("annualInterestRate")) {
                     handleResponse(exchange, getIntegerWraparoundPage());
-                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/wraparound") && exchange.getRequestURI().getQuery().contains("content") && exchange.getRequestURI().getQuery().contains("filename")) {
+                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/wraparound") && exchange.getRequestURI().getQuery().contains("initialCapital") && exchange.getRequestURI().getQuery().contains("monthlySavings") && exchange.getRequestURI().getQuery().contains("investmentPeriod") && exchange.getRequestURI().getQuery().contains("annualInterestRate")) {
                     params = paramsToMap(exchange.getRequestURI().getQuery());
                     handleResponse(exchange, getIntegerWraparoundResponsePage(params));
                 } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/deserialization")) {
@@ -680,12 +676,28 @@ public class WebInterface {
                         params = paramsToMap(data);
                     }
                     handleResponse(exchange, getDeserializationResponsePage(params));
-                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/inputValidation") && !exchange.getRequestURI().getQuery().contains("input")) {
+                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/inputValidation") && !exchange.getRequestURI().getQuery().contains("rounds")) {
                     handleResponse(exchange, getInputValidationPage());
-                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/inputValidation") && exchange.getRequestURI().getQuery().contains("input")) {
+                } else if ("GET".equals(exchange.getRequestMethod()) && exchange.getRequestURI().getPath().equals("/inputValidation") && exchange.getRequestURI().getQuery().contains("rounds")) {
                     params = paramsToMap(exchange.getRequestURI().getQuery());
                     handleResponse(exchange, getInputValidationResponsePage(params));
+                } else {
+                    handleResponse(exchange, htmlbuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body>" +
+                            "<div>\n" +
+                            "<h1>404</h1>\n" +
+                            "<h2>Page Not Found</h2>\n" +
+                            "<p>The Page you are looking for doesn't exist or an other error occurred. Click <a href=\"/\">here</a> to go back.</p>\n" +
+                            "</div>\n" +
+                            "</body></html>").toString());
                 }
+            } else {
+                handleResponse(exchange, htmlbuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body>" +
+                        "<div>\n" +
+                        "<h1>404</h1>\n" +
+                        "<h2>Page Not Found</h2>\n" +
+                        "<p>The Page you are looking for doesn't exist or an other error occurred. Click <a href=\"/\">here</a> to go back.</p>\n" +
+                        "</div>\n" +
+                        "</body></html>").toString());
             }
         }
 
@@ -696,19 +708,32 @@ public class WebInterface {
          */
         private String getCommandPage() {
             StringBuilder htmlBuilder = new StringBuilder();
-            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
+            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body>" +
                     "  <div>\n" +
-                    "    <h2>Ping: </h2>" +
-                    "    <span>You can test the reachability of a website with this tool</span>" +
-                    "    <div>\n" +
-                    "      <label for=\"domain\">Domain: </label>\n" +
-                    "      <input size=\"100\" type=\"text\" name=\"domain\" id=\"domain\">\n" +
-                    "    </div>\n" +
+                    "    <h2>Ping: </h2>\n" +
+                    "    <span>You can test the reachability of a website with this tool (the input is resolved as a parameter of the ping command)</span>\n" +
+                    "  </div>\n" +
+                    "  <form action=\"\" method=\"get\">\n" +
+                    "  <div>\n" +
+                    "    <label for=\"parameter\">Domain: </label>\n" +
+                    "    <input size=\"100\" type=\"text\" name=\"parameter\" id=\"parameter\">\n" +
                     "    <div>\n" +
                     "      <input type=\"submit\" value=\"Check\">\n" +
                     "    </div>\n" +
                     "  </div>\n" +
-                    "</form>").append("</body></html>");
+                    "  </form>\n" +
+                    "  <div>\n" +
+                    "    <span>You can test the reachability of a website with this tool (the input is appended as a string parameter of the bash executing the ping command)</span>\n" +
+                    "  </div>\n" +
+                    "  <form action=\"\" method=\"get\">\n" +
+                    "  <div>\n" +
+                    "    <label for=\"domain\">Domain: </label>\n" +
+                    "    <input size=\"100\" type=\"text\" name=\"domain\" id=\"domain\">\n" +
+                    "    <div>\n" +
+                    "      <input type=\"submit\" value=\"Check\">\n" +
+                    "    </div>\n" +
+                    "  </div>\n" +
+                    "  </form>").append("</body></html>");
             return htmlBuilder.toString();
         }
 
@@ -721,26 +746,45 @@ public class WebInterface {
          * @return A string containing the HTML.
          */
         private String getCommandResponsePage(Map<String, String> params) {
-            String result;
-            String domain = params.get("domain");
+            String result="";
             CommandExecution commandExecution = new CommandExecution();
-            result = commandExecution.execute("ping -c 4 " + domain);
+            if (params.containsKey("domain")){
+                String domain = params.get("domain");
+                result = commandExecution.executePing(domain);
+            } else if (params.containsKey("parameter")){
+                String parameter = params.get("parameter");
+                result = commandExecution.execute("ping -c 4 " +parameter);
+            }
+
             StringBuilder htmlBuilder = new StringBuilder();
-            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
-                    "  <div>\n" +
-                    "    <h2>Ping: </h2>" +
-                    "    <span>You can test the reachability of a website from your computer with this tool</span>" +
-                    "    <div>\n" +
-                    "      <label for=\"domain\">Domain: </label>\n" +
-                    "      <input size=\"100\" type=\"text\" name=\"domain\" id=\"domain\">\n" +
+            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body>" +
+                            "  <div>\n" +
+                            "    <h2>Ping: </h2>\n" +
+                            "    <span>You can test the reachability of a website with this tool (the input is resolved as a parameter of the ping command)</span>\n" +
+                            "  </div>\n" +
+                            "  <form action=\"\" method=\"get\">\n" +
+                            "  <div>\n" +
+                            "    <label for=\"parameter\">Domain: </label>\n" +
+                            "    <input size=\"100\" type=\"text\" name=\"parameter\" id=\"parameter\">\n" +
+                            "    <div>\n" +
+                            "      <input type=\"submit\" value=\"Check\">\n" +
+                            "    </div>\n" +
+                            "  </div>\n" +
+                            "  </form>" +
+                            "  <div>\n" +
+                            "    <span>You can test the reachability of a website with this tool (the input is appended as a string parameter of the bash executing the ping command)</span>\n" +
+                            "  </div>\n" +
+                            "  <form action=\"\" method=\"get\">\n" +
+                            "  <div>\n" +
+                            "    <label for=\"domain\">Domain: </label>\n" +
+                            "    <input size=\"100\" type=\"text\" name=\"domain\" id=\"domain\">\n" +
+                            "    <div>\n" +
+                            "      <input type=\"submit\" value=\"Check\">\n" +
+                            "    </div>\n" +
+                            "  </div>\n" +
+                            "  </form>\n" +
                     "    </div>\n" +
-                    "    <div>\n" +
-                    "      <input type=\"submit\" value=\"Check\">\n" +
-                    "</form>" +
-                    "    </div>\n" +
-                    "    <pre>\n" +
-                    "      <code>" + result + "</code>\n" +
-                    "    </pre>\n" +
+                    "    <pre><code>" + result + "</code></pre>\n" +
                     "  </div>\n").append("</body></html>");
             return htmlBuilder.toString();
         }
@@ -807,9 +851,7 @@ public class WebInterface {
                     "  </div>\n" +
                     "</form>" +
                     "    </div>\n" +
-                    "    <pre>\n" +
-                    "      <code>" + result + "</code>\n" +
-                    "    </pre>\n" +
+                    "    <pre><code>" + result + "</code></pre>\n" +
                     "  </div>\n").append("</body></html>");
             return htmlBuilder.toString();
         }
@@ -853,8 +895,8 @@ public class WebInterface {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
                     "  <div>\n" +
-                    "    <h2>Validate Usernames: </h2>" +
-                    "    <span>Validate if the desired username is permitted. Multiple usernames can be entered in a comma-separated format.</span>" +
+                    "    <h2>Validate Usernames: </h2>\n" +
+                    "    <span>Validate if the desired username is permitted. Multiple usernames can be entered in a comma-separated format.</span>\n" +
                     "    <div>\n" +
                     "      <label for=\"usernames\">Username(s): </label>\n" +
                     "      <input size=\"100\" type=\"text\" name=\"usernames\" id=\"usernames\">\n" +
@@ -865,9 +907,7 @@ public class WebInterface {
                     "  </div>\n" +
                     "</form>"+
                     "    </div>\n" +
-                    "    <pre>\n" +
-                    "      <code>" + result + "</code>\n" +
-                    "    </pre>\n" +
+                    "    <pre><code>" + result + "</code></pre>\n" +
                     "  </div>\n").append("</body></html>");
             return htmlBuilder.toString();
         }
@@ -890,8 +930,8 @@ public class WebInterface {
                 }
                 appendGetFile = "<form action=\"\" method=\"get\">\n" +
                         "  <div>\n" +
-                        "    <h2>Get File: </h2>" +
-                        "    <span>By entering the file name, you can read the content of the previously uploaded file</span>" +
+                        "    <h2>Get File: </h2>\n" +
+                        "    <span>By entering the file name, you can read the content of the previously uploaded file</span>\n" +
                         "    <div>\n" +
                         "      <label for=\"fileDownload\">Filename: </label>\n" +
                         "      <input size=\"100\" type=\"text\" name=\"fileDownload\" id=\"fileDownload\">\n" +
@@ -903,8 +943,8 @@ public class WebInterface {
                         "</form>\n"+
                         "<form action=\"\" method=\"get\">\n" +
                         "  <div>\n" +
-                        "    <h2>Delete File: </h2>" +
-                        "    <span>By entering the file name, you can delete the previously uploaded file</span>" +
+                        "    <h2>Delete File: </h2>\n" +
+                        "    <span>By entering the file name, you can delete the previously uploaded file</span>\n" +
                         "    <div>\n" +
                         "      <label for=\"fileDelete\">Filename: </label>\n" +
                         "      <input size=\"100\" type=\"text\" name=\"fileDelete\" id=\"fileDelete\">\n" +
@@ -918,8 +958,8 @@ public class WebInterface {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
                     "  <div>\n" +
-                    "    <h2>Upload File: </h2>" +
-                    "    <span>By entering a file name and the contents of this file, the file is created in the <code>username/filename.txt</code> directory.</span>" +
+                    "    <h2>Upload File: </h2>\n" +
+                    "    <span>By entering a file name and the contents of this file, the file is created in the <code>username/filename.txt</code> directory.</span>\n" +
                     "    <div>\n" +
                     "      <label for=\"filename\">Filename: </label>\n" +
                     "      <input size=\"100\" type=\"text\" name=\"filename\" id=\"filename\">\n" +
@@ -934,10 +974,8 @@ public class WebInterface {
                     "  </div>\n" +
                     "</form>\n" +
                     "  <div>\n" +
-                    "    <h2>List my Files: </h2>" +
-                    "    <pre>\n" +
-                    "      <code>" + filesString + "</code>" +
-                    "    </pre>\n" +
+                    "    <h2>List my Files: </h2>\n" +
+                    "    <pre><code>" + filesString + "</code></pre>\n" +
                     "  </div>\n").append(appendGetFile).append("</body></html>");
             return htmlBuilder.toString();
         }
@@ -976,7 +1014,7 @@ public class WebInterface {
                 }
                 appendUpload =
                         "    <div>\n" +
-                                "      <span>\n" + result + ", Path:" +
+                                "      <span>\n" + result + ", Path: \n" +
                                 "        <code>" + path + "</code>\n" +
                                 "      </span>\n" +
                                 "  </div>\n";
@@ -986,7 +1024,7 @@ public class WebInterface {
                 String content = fileOperations.readFile(user.getUsername(), fileDownload);
                 appendDownload =
                         "    <div>\n" +
-                                "      <span>\n Content:" +
+                                "      <span>\n Content: \n" +
                                 "        <code>" + content + "</code>\n" +
                                 "      </span>\n" +
                                 "  </div>\n";
@@ -1003,8 +1041,8 @@ public class WebInterface {
                 }
                 appendGetFile = "<form action=\"\" method=\"get\">\n" +
                         "  <div>\n" +
-                        "    <h2>Get File: </h2>" +
-                        "    <span>By entering the file name, you can read the content of the previously uploaded file</span>" +
+                        "    <h2>Get File: </h2>\n" +
+                        "    <span>By entering the file name, you can read the content of the previously uploaded file</span>\n" +
                         "    <div>\n" +
                         "      <label for=\"fileDownload\">Filename: </label>\n" +
                         "      <input size=\"100\" type=\"text\" name=\"fileDownload\" id=\"fileDownload\">\n" +
@@ -1016,8 +1054,8 @@ public class WebInterface {
                         "</form>\n"+
                         "<form action=\"\" method=\"get\">\n" +
                         "  <div>\n" +
-                        "    <h2>Delete File: </h2>" +
-                        "    <span>By entering the file name, you can delete the previously uploaded file</span>" +
+                        "    <h2>Delete File: </h2>\n" +
+                        "    <span>By entering the file name, you can delete the previously uploaded file</span>\n" +
                         "    <div>\n" +
                         "      <label for=\"fileDelete\">Filename: </label>\n" +
                         "      <input size=\"100\" type=\"text\" name=\"fileDelete\" id=\"fileDelete\">\n" +
@@ -1032,8 +1070,8 @@ public class WebInterface {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
                     "  <div>\n" +
-                    "    <h2>Upload File: </h2>" +
-                    "    <span>By entering a file name and the contents of this file, the file is created in the <code>username/filename.txt</code> directory.</span>" +
+                    "    <h2>Upload File: </h2>\n" +
+                    "    <span>By entering a file name and the contents of this file, the file is created in the <code>username/filename.txt</code> directory.</span>\n" +
                     "    <div>\n" +
                     "      <label for=\"filename\">Filename: </label>\n" +
                     "      <input size=\"100\" type=\"text\" name=\"filename\" id=\"filename\">\n" +
@@ -1048,10 +1086,8 @@ public class WebInterface {
                     "  </div>\n").append(appendUpload).append(
                     "</form>\n" +
                             "  <div>\n" +
-                            "    <h2>List my Files: </h2>" +
-                            "    <pre>\n" +
-                            "      <code>" + filesString + "</code>" +
-                            "    </pre>\n" +
+                            "    <h2>List my Files: </h2>\n" +
+                            "    <pre><code>" + filesString + "</code></pre>\n" +
                             "  </div>\n").append(appendGetFile).append(appendDownload).append("</body></html>");
             return htmlBuilder.toString();
         }
@@ -1064,8 +1100,8 @@ public class WebInterface {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
                     "  <div>\n" +
-                    "    <h2>Compound interest calculator: </h2>" +
-                    "    <span>This compound interest calculator can be used to calculate how much compound interest will accrue over a given investment period. </span>" +
+                    "    <h2>Compound interest calculator: </h2>\n" +
+                    "    <span>This compound interest calculator can be used to calculate how much compound interest will accrue over a given investment period. </span>\n" +
                     "    <div>\n" +
                     "      <label for=\"initialCapital\">Initial capital (rounded to whole numbers): </label>\n" +
                     "      <input size=\"100\" type=\"number\" name=\"initialCapital\" id=\"initialCapital\">\n" +
@@ -1110,8 +1146,8 @@ public class WebInterface {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
                     "  <div>\n" +
-                    "    <h2>Compound interest calculator: </h2>" +
-                    "    <span>This compound interest calculator can be used to calculate how much compound interest will accrue over a given investment period. </span>" +
+                    "    <h2>Compound interest calculator: </h2>\n" +
+                    "    <span>This compound interest calculator can be used to calculate how much compound interest will accrue over a given investment period. </span>\n" +
                     "    <div>\n" +
                     "      <label for=\"initialCapital\">Initial capital (rounded to whole numbers): </label>\n" +
                     "      <input size=\"100\" type=\"number\" name=\"initialCapital\" id=\"initialCapital\">\n" +
@@ -1159,9 +1195,7 @@ public class WebInterface {
                     "  <span> The following text field receives a serialized object and deserializes it. </span> \n" +
                     "  <div>\n" +
                     "  <span> The serialized object with Base64 encoding looks like: </span> \n" +
-                    "    <pre>\n" +
-                    "      <code>" + serializedObject + "</code>\n" +
-                    "    </pre>\n" +
+                    "    <pre><code>" + serializedObject + "</code></pre>\n" +
                     "  </div>\n" +
                     "    <div>\n" +
                     "      <label for=\"objectString\">Object String: </label>\n" +
@@ -1200,9 +1234,7 @@ public class WebInterface {
                     "  <span> The following text field receives a serialized object and deserializes it. </span> \n" +
                     "  <div>\n" +
                     "  <span> The deserialized object <code>" + name + "</code> executed the command: </span> \n" +
-                    "    <pre>\n" +
-                    "      <code>" + command + "</code>\n" +
-                    "    </pre>\n" +
+                    "    <pre><code>" + command + "</code></pre>\n" +
                     "  </div>\n" +
                     "    <div>\n" +
                     "      <label for=\"objectString\">Object String: </label>\n" +
@@ -1246,25 +1278,26 @@ public class WebInterface {
             byte[] diceResults;
             ImproperInputValidation improperInputValidation = new ImproperInputValidation();
             diceResults = improperInputValidation.rollDice(Integer.parseInt(params.get("rounds")));
-            for (int i = 0; i< diceResults.length; i++){
-                result = result+i+". round = "+diceResults[i]+"\n";
+            for (int i = 0; i < diceResults.length; i++){
+                result = result+(i+1)+". round = "+diceResults[i]+"\n";
             }
             StringBuilder htmlBuilder = new StringBuilder();
-            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body><form action=\"\" method=\"get\">\n" +
+            htmlBuilder.append("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"></head><body>" +
                     "  <div>\n" +
-                    "    <h2>Roll the Dice: </h2>" +
-                    "    <span>Indicate the number of rounds to be rolled. A dice result is output for each round.</span>" +
-                    "    <div>\n" +
-                    "      <label for=\"rounds\">Rounds: </label>\n" +
-                    "      <input size=\"100\" type=\"number\" name=\"rounds\" id=\"rounds\">\n" +
-                    "    </div>\n" +
+                    "    <h2>Roll the Dice: </h2>\n" +
+                    "    <span>Indicate the number of rounds to be rolled. A dice result is output for each round.</span>\n" +
+                    "  </div>\n" +
+                    "  <div>\n" +
+                    "  <form action=\"\" method=\"get\">\n" +
+                    "    <label for=\"rounds\">Rounds: </label>\n" +
+                    "    <input size=\"100\" type=\"number\" name=\"rounds\" id=\"rounds\">\n" +
                     "    <div>\n" +
                     "      <input type=\"submit\" value=\"Dice!\">\n" +
-                    "</form>" +
-                    "    </div>\n" +
-                    "    <pre>\n" +
-                    "      <code>" + result + "</code>\n" +
-                    "    </pre>\n" +
+                    "    </div>" +
+                    "  </form>" +
+                    "  </div>\n" +
+                    "  <div>" +
+                    "    <pre><code>" + result + "</code></pre>" +
                     "  </div>\n").append("</body></html>");
             return htmlBuilder.toString();
         }
