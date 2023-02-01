@@ -6,6 +6,12 @@ import java.nio.file.Paths;
 
 public class FileOperations {
 
+    /**
+     * Deletes the specified file from the specified user's directory.
+     * @param username the name of the user
+     * @param filename the name of the file to be deleted
+     * @return the status whether the operation was successful or not as a string.
+     */
     public String deleteFile(String username, String filename){
         String path = username+File.separatorChar+filename;
         File f = new File(path);
@@ -22,6 +28,14 @@ public class FileOperations {
 
 
     }
+
+    /**
+     * Creates a new file with the specified name in the specified user's directory.
+     *
+     * @param username the name of the user
+     * @param filename the name of the file to be created
+     * @return the path of the newly created file, an empty string otherwise.
+     */
     public String createFile(String username, String filename){
         File f = null;
         //Verify directory starts with the username (the 'safe' directory)
@@ -41,6 +55,12 @@ public class FileOperations {
         return filePath;
     }
 
+    /**
+     * Writes the specified text to a specified file.
+     * @param path the path of the file to be written
+     * @param text the text to be written to the file
+     * @return the status whether the operation was successful or not as a string.
+     */
     public String writeToFile(String path, String text){
 
         try {
@@ -54,6 +74,11 @@ public class FileOperations {
         return "writing to file gone wrong\n";
     }
 
+    /**
+     * Returns an array of filenames in the specified user's directory.
+     * @param username the name of the user
+     * @return an array of filenames in the user's directory, null otherwise.
+     */
     public String[] getFiles(String username){
         // Array to store the filenames
         File[] filelist;
@@ -77,6 +102,12 @@ public class FileOperations {
         return filenames;
     }
 
+    /**
+     * Reads the content of the specified file in the specified user's directory.
+     * @param username the name of the user
+     * @param filename the name of the file to be read
+     * @return the content of the file, an empty string otherwise.
+     */
     public String readFile(String username, String filename){
         String line;
         String content="";

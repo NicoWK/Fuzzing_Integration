@@ -391,6 +391,13 @@ public class WebInterface {
             return htmlBuilder.toString();
         }
 
+        /**
+         *  The getRegisteredPage method generates an HTML string after checking the provided parameters, which contain the
+         *  username, password and the repeated password as a Map. The user will be created in the database if the passwords
+         *  match and the user does not exist yet, otherwise an error message will be displayed.
+         * @param params A map containing the key-value pairs of the request parameters
+         * @return A string containing the HTML.
+         */
         private String getRegisteredPage(Map<String, String> params) {
             StringBuilder htmlBuilder = new StringBuilder();
             String output = "";
@@ -1093,8 +1100,9 @@ public class WebInterface {
         }
 
         /**
-         *
-         * @return
+         * The getIntegerWraparoundPage method generates an HTML string for the subpage where the integer wraparound vulnerability could be exploited. It provides a form to
+         * enter the initial Capital, monthly savings, annual investment period and the annual interest rate to calculate the final capital.
+         * @return A string containing the HTML.
          */
         private String getIntegerWraparoundPage() {
             StringBuilder htmlBuilder = new StringBuilder();
@@ -1127,8 +1135,11 @@ public class WebInterface {
         }
 
         /**
-         * @param params
-         * @return
+         * The method getIntegerWraparoundResponsePage handles the integer wraparound vulnerability by passing the user input to a method of the {@link IntegerWraparound} class without validating.
+         * The user input is located in the map passed as a parameter. These are parsed to integers and then used for the calculation. The result is written to the HTML string.
+         * Moreover, the HTML page contains forms for the initial Capital, monthly savings, annual investment period and the annual interest rate to calculate the final capital.
+         * @param params A map containing the key-value pairs of the request parameters, in this case the initial Capital, monthly savings, annual investment period and the annual interest rate
+         * @return A string containing the HTML.
          */
         private String getIntegerWraparoundResponsePage(Map<String, String> params) {
             String resultString;
@@ -1176,7 +1187,9 @@ public class WebInterface {
         }
 
         /**
-         * @return
+         * The getDeserializationPage method generates an HTML string for the subpage where the deserialization of untrusted data vulnerability could be exploited.
+         * It provides a form to enter a serialized and base64 encoded Object.
+         * @return A string containing the HTML.
          */
         private String getDeserializationPage() {
             byte[] serializedObjectStream;
@@ -1210,8 +1223,11 @@ public class WebInterface {
         }
 
         /**
-         * @param params
-         * @return
+         * The method getDeserializationResponsePage handles the deserialization of untrusted data vulnerability by passing the serialized object to a method of the {@link SerializationHelper} class without validating.
+         * The object gets deserialized and the command, as an attribute of the object, executed at the same time, is added to the HTML String.
+         * The HTML page also contains a form to enter another serialized and base64 encoded Object.
+         * @param params A map containing the key-value pairs of the request parameters, in this case the base64 encoded serialized object
+         * @return A string containing the HTML.
          */
         private String getDeserializationResponsePage(Map<String, String> params) {
             String name = null, command = null;
@@ -1249,7 +1265,9 @@ public class WebInterface {
         }
 
         /**
-         * @return
+         * The getInputValidationPage method generates an HTML string for the subpage where the improper input validation vulnerability could be exploited.
+         * It provides a form  to enter the number of rounds to be rolled.
+         * @return A string containing the HTML
          */
         private String getInputValidationPage() {
             StringBuilder htmlBuilder = new StringBuilder();
@@ -1270,8 +1288,10 @@ public class WebInterface {
         }
 
         /**
-         * @param params
-         * @return
+         * The method getInputValidationResponsePage handles the improper input validation vulnerability by passing the serialized object to a method of the {@link ImproperInputValidation} class without validating.
+         * It passes the number of rounds from the params Map to this method and adds the result to the HTML string.
+         * @param params A map containing the key-value pairs of the request parameters, in this case the rounds to be rolled.
+         * @return A string containing the HTML.
          */
         private String getInputValidationResponsePage(Map<String, String> params) {
             String result = "";

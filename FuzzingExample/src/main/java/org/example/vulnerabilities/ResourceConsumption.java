@@ -3,8 +3,13 @@ package org.example.vulnerabilities;
 import java.util.ArrayList;
 
 public class ResourceConsumption {
-    //Recursive function to calculate the total cost via cost per day and days
-    // For one week a discount of 5% is added, for one month 10½ and for more than three months 15½
+    /** Recursive function to calculate the total cost via cost per day and days
+     * or one week a discount of 5% is added, for one month 10½ and for more than three months 15½
+     * @param days days to be multiplied
+     * @param costPerDay cost per day
+     * @return The total cost.
+     *
+     **/
     public int calculateCostRekursive(int days, int costPerDay) {
         //validate that the inputs are positive numbers
         if (days > 0 && costPerDay > 0){
@@ -29,26 +34,5 @@ public class ResourceConsumption {
             return calculateCostRekursive(days, costPerDay);
         }
 
-    }
-    /**
-     * This method takes an integer as input and returns a list of its prime factors.
-     *
-     * @param num the integer to be prime factorized
-     * @return an ArrayList of prime factors of the input integer
-     */
-    public static ArrayList<Integer> primeFactorize(int num) {
-        ArrayList<Integer> factors = new ArrayList<Integer>();
-        for (int i = 2; i <= num / i; i++) {
-            // Divide the input number by i as long as it is divisible by i.
-            while (num % i == 0) {
-                factors.add(i);
-                num /= i;
-            }
-        }
-        // If the input number is greater than 1 and no further factors are found, it is added as the last factor.
-        if (num > 1) {
-            factors.add(num);
-        }
-        return factors;
     }
 }

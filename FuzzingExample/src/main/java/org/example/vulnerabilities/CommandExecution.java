@@ -9,6 +9,16 @@ public class CommandExecution {
 
     //OS-Command Injection possible: Executes a command based on the user-input
     // NullPointer Dereference, the command could be empty
+
+    /**
+     * Executes a command passed as a string and returns the output as a string.
+     * The command is executed in a subprocess and its result is captured.
+     * If the command contains quotes, they are replaced with apostrophes in the output.
+     *
+     * @param command the command to be executed.
+     * @return the output of the executed command as a string.
+     * @throws RuntimeException if an IOException or InterruptedException occurs during the execution of the command
+     */
     public String execute(String command){
         String line;
         BufferedReader bufferedReader;
@@ -37,6 +47,14 @@ public class CommandExecution {
         return result;
     }
 
+    /**
+     * Executes a ping command to a specified host and returns the output as a string.
+     * The command is executed in a subprocess and its result is captured.
+     * If the output contains quotes, they are replaced with apostrophes in the returned string.
+      * @param hostname the hostname to ping.
+     * @return output of the ping command as a string.
+     * @throws RuntimeException if an IOException or InterruptedException occurs during the execution of the command.
+     */
     public String executePing(String hostname){
         String line;
         BufferedReader bufferedReader;

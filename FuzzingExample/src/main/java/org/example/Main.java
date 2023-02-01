@@ -15,7 +15,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
+        // Instantiate the WebInterface class.
         WebInterface web = new WebInterface();
+        // Start the Web Server
         web.startServer();
     }
 }

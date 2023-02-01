@@ -2,12 +2,11 @@ package org.example.fuzztest;
 
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import org.example.vulnerabilities.FileOperations;
-import org.junit.Assert;
-
 import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
+/**
+ * This class contains the fuzz test, which can be run using a custom sanitizer. The included vulnerability is a path traversal.
+ */
 public class PathTraversalFuzzTest {
 
     public static void fuzzerTestOneInput(FuzzedDataProvider data) {

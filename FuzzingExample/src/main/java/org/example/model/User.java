@@ -1,8 +1,10 @@
 package org.example.model;
 
-import java.io.Serializable;
 
-public class User implements Serializable {
+/**
+ *  This class is an entity class that represents the users that are persisted in the database.
+ */
+public class User {
 
     private String username;
     private String password;

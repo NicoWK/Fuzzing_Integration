@@ -13,6 +13,14 @@ public class VulnerableObject implements Serializable {
         this.command = command;
     }
 
+    /**
+     * reads an object from the input stream and deserializes it.
+     * This method can result in a deserialization vulnerability if untrusted data is deserialized.
+     * In this case, the method blindly executes a runtime command, which can be dangerous and potentially harmful to the system.
+     *
+     * @param stream the input stream to read the object from
+     * @throws Exception if an error occurs while reading the object.
+     */
     private void readObject(ObjectInputStream stream) throws Exception {
         //deserialize data
         stream.defaultReadObject();
