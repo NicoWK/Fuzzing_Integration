@@ -26,8 +26,10 @@ This repository includes a project with two modules.
 4. The fuzz-test should now be built with Maven and then be executed.
 
 ### Fuzzing with JUnit5
-
-
+1. Set the environment variable `JAZZER_FUZZ` to `1` (for example in your IDE)
+   ![Set the environment variable](FuzzingExample/docs/EnvironmentVariable.PNG?raw=true "Set environment variable in IntelliJ IDE")
+2. Run the FuzzTest from your IDE with or without coverage
+   ![Run Fuzz-Test from IDE](FuzzingExample/docs/RunFuzzTest.PNG?raw=true "Run Fuzz-Test from IntelliJ IDE")
 
 ### Fuzzing with custom sanitizers
 
