@@ -587,6 +587,10 @@ public class WebInterface {
                         "    <form action=\"/nullDereference\" method=\"get\">" +
                         "      <input type=\"submit\" value=\"Null Pointer Dereference\"/>  " +
                         "    </form>" +
+                        "    </form>" +
+                        "    <form action=\"/wraparound\" method=\"get\">" +
+                        "      <input type=\"submit\" value=\"Integer Wraparound\"/>  " +
+                        "    </form>" +
                         "    <form action=\"/pathTraversal\" method=\"get\">" +
                         "      <input type=\"submit\" value=\"Path Traversal\"/>  " +
                         "    </form>" +

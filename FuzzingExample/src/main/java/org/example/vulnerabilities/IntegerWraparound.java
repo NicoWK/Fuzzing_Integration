@@ -16,14 +16,15 @@ public class IntegerWraparound {
         // verify all parameters are positive and not 0
         if (initialCapital > 0 && monthlySavings > 0 && investmentPeriod > 0 && annualInterestRate > 0){
             int deposit = 0;
-            int finalCapital=0;
-            double interestRate = annualInterestRate / 100;
+            int finalCapital= initialCapital; // final capital starts with initial capital
+            double interestRate = ((double) annualInterestRate )/100;
             //
             for (int i = 1; i <= investmentPeriod * 12; i++) {
                 deposit += monthlySavings; // add the monthly savings to the deposit
-                finalCapital += (int)(initialCapital * (interestRate / 12)) + monthlySavings; // add the interest and the deposit to the initial capital to calculate the final capital
+                finalCapital += (int)(finalCapital * (interestRate / 12)) + monthlySavings; // add the interest and the deposit to the initial capital (last final capital) to calculate the final capital
             }
             int interest = finalCapital - deposit - initialCapital; //calculate the interest by subtracting the deposit and initial capital from the final capital.
+            deposit += initialCapital;
             return new int[] {interest, deposit, finalCapital};
         } else {
             return new int[] {0,0,0};
